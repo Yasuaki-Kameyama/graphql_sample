@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/Yasuaki-Kameyama/graphql_sample#readme",
   "dependencies": {
+    "apollo-server-express": "^2.9.14",
     "express": "^4.17.1",
-    "express-graphql": "^0.9.0",
     "graphql": "^14.5.8"
   }
 }

@@ -7,5 +7,6 @@ const sequelize = new Sequelize({
 
 const database = {};
 database.sequelize = sequelize;
+database.Sequelize = Sequelize;
 
 module.exports = database;

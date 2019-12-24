@@ -3,8 +3,8 @@ const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const { users } = require('./users');
 
-const sqlite3 = require('sqlite3');
-const database = new sqlite3.Database('./testdb.sqlite3');
+const database = require('./models/index')
+const table_header = require('./models/table_header');
 
 // Construct a schema, using GraphQL schema language
 const typeDefs = gql`
@@ -24,25 +24,13 @@ const typeDefs = gql`
     tableHeaders: TableHeader
   }
 `;
-const getTable = async () => {
-  const sql = 'SELECT id, name, description FROM table_header';
-  database.serialize(() => {
-    database.all(sql, (err, rows) => {
-        return rows;
-      });
-  });
-}
-const aaa= () => {
-  return [{id:1, name:'a', description:'q'}, {id:3, name:'b', description:'w'}, {id:2, name:'c', description:'s'}];
-}
 
 
 
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    users: () => users,
-    tableHeaders: () => getTable
+    tableHeaders: async (parent, args, {TableHeader}) => {TableHeader.findAll();},
   },
 };
 
@@ -50,7 +38,7 @@ const resolvers = {
 
 
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers, context: {TableHeader: table_header}});
 
 const app = express();
 server.applyMiddleware({ app });
